@@ -15,6 +15,74 @@ Game::~Game()
 
 bool Game::init()
 {
+	in_menu = true;
+
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	menu_text.setString("Welcome to Whack-a-mole");
+	menu_text.setFont(font);
+	menu_text.setCharacterSize(50);
+	menu_text.setScale(0.5, 0.5);
+	menu_text.setFillColor(sf::Color(255, 255, 255, 128));
+	menu_text.setPosition(
+		window.getSize().x / 2 - menu_text.getGlobalBounds().width / 2,
+		window.getSize().y / 4 - menu_text.getGlobalBounds().height / 2);
+	
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	play_option_text.setString("Play");
+	play_option_text.setFont(font);
+	play_option_text.setCharacterSize(50);
+	play_option_text.setScale(0.5, 0.5);
+	play_option_text.setFillColor(sf::Color(255, 255, 255, 128));
+	play_option_text.setPosition(
+		window.getSize().x / 4 - play_option_text.getGlobalBounds().width / 2,
+		window.getSize().y / 2 - play_option_text.getGlobalBounds().height / 2);
+	
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	quit_option_text.setString("Quit");
+	quit_option_text.setFont(font);
+	quit_option_text.setCharacterSize(50);
+	quit_option_text.setScale(0.5, 0.5);
+	quit_option_text.setFillColor(sf::Color(255, 255, 255, 128));
+	quit_option_text.setPosition(
+		window.getSize().x*3 / 4 - quit_option_text.getGlobalBounds().width / 2,
+		window.getSize().y / 2 - quit_option_text.getGlobalBounds().height / 2);
+
+
+	if (!background_texture.loadFromFile("D:/Wack-a-fool/Data/WhackaMole Worksheet/background.png"))
+	{
+		std::cout << "background texture did not load \n";
+	}
+	background.setTexture(background_texture);
+
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	title_text.setString("Whack-a-mole");
+	title_text.setFont(font);
+	title_text.setCharacterSize(200);
+	title_text.setScale(0.5, 0.5);
+	title_text.setFillColor(sf::Color(255, 255, 255, 128));
+	title_text.setPosition(
+		window.getSize().x / 2 - title_text.getGlobalBounds().width / 2,
+		window.getSize().y / 2 - title_text.getGlobalBounds().height / 2);
+
+	if (!bird_texture.loadFromFile("D:/Wack-a-fool/Data/WhackaMole Worksheet/bird.png"))
+	{
+		std::cout << "bird texture did not load \n";
+	}
+	bird.setTexture(bird_texture);
+	bird.setPosition(100, 100);
+	bird.setScale(0.5, 0.5);
 
   return true;
 }
@@ -26,7 +94,18 @@ void Game::update(float dt)
 
 void Game::render()
 {
-
+	if (in_menu == true)
+	{
+		window.draw(menu_text);
+		window.draw(play_option_text);
+		window.draw(quit_option_text);
+	}
+	else
+	{
+		window.draw(background);
+		window.draw(title_text);
+		window.draw(bird);
+	}
 }
 
 void Game::mouseClicked(sf::Event event)

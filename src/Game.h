@@ -19,6 +19,21 @@ class Game
   sf::RenderWindow& window;
   sf::Sprite ball;
   sf::Texture ball_texture;
+  
+  sf::Sprite background;
+  sf::Texture background_texture;
+  
+  sf::Text title_text;
+  sf::Font font;
+  
+  sf::Sprite bird;
+  sf::Texture bird_texture;
+  
+  sf::Text menu_text;
+  sf::Text play_option_text;
+  sf::Text quit_option_text;
+
+  bool in_menu;
 
 };
 
