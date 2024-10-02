@@ -14,6 +14,8 @@ class Game
   void render();
   void mouseClicked(sf::Event event);
   void keyPressed(sf::Event event);
+  bool collisionCheck(sf::Vector2i, sf::Sprite);
+  void Spawn(sf::Sprite);
 
  private:
   sf::RenderWindow& window;
@@ -34,6 +36,14 @@ class Game
   sf::Text quit_option_text;
 
   bool in_menu;
+  bool play_selected;
+  int speed = 200;
+  bool reverse;
+  
+  sf::Vector2i mouseClick;
+
+  int score = 0;
+  sf::Text score_text;
 
 };
 
