@@ -32,11 +32,13 @@ class Game
   sf::Texture bird_texture;
   
   sf::Text menu_text;
+  sf::Text bird_option_text;
+  sf::Text paper_option_text;
   sf::Text play_option_text;
   sf::Text quit_option_text;
 
-  bool in_menu;
-  bool play_selected;
+  int gamestate = 0;
+  int play_selected = 0;
   int speed = 200;
   bool reverse;
   

@@ -15,13 +15,11 @@ Game::~Game()
 
 bool Game::init()
 {
-	in_menu = true;
-
 	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
-	menu_text.setString("Welcome to Whack-a-mole");
+	menu_text.setString("Welcome to Games");
 	menu_text.setFont(font);
 	menu_text.setCharacterSize(50);
 	menu_text.setScale(0.5, 0.5);
@@ -40,8 +38,34 @@ bool Game::init()
 	play_option_text.setScale(0.5, 0.5);
 	play_option_text.setFillColor(sf::Color(255, 255, 255, 128));
 	play_option_text.setPosition(
-		window.getSize().x / 4 - play_option_text.getGlobalBounds().width / 2,
+		window.getSize().x / 2 - play_option_text.getGlobalBounds().width / 2,
 		window.getSize().y / 2 - play_option_text.getGlobalBounds().height / 2);
+
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	bird_option_text.setString("Whak a Bird");
+	bird_option_text.setFont(font);
+	bird_option_text.setCharacterSize(50);
+	bird_option_text.setScale(0.5, 0.5);
+	bird_option_text.setFillColor(sf::Color(255, 255, 255, 128));
+	bird_option_text.setPosition(
+		window.getSize().x / 2 - bird_option_text.getGlobalBounds().width / 2,
+		window.getSize().y * 1.1 / 2 - bird_option_text.getGlobalBounds().height / 2);
+
+	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		std::cout << "font did not load \n";
+	}
+	paper_option_text.setString("Papers Please");
+	paper_option_text.setFont(font);
+	paper_option_text.setCharacterSize(50);
+	paper_option_text.setScale(0.5, 0.5);
+	paper_option_text.setFillColor(sf::Color(255, 255, 255, 128));
+	paper_option_text.setPosition(
+		window.getSize().x / 2 - paper_option_text.getGlobalBounds().width / 2,
+		window.getSize().y * 1.2 / 2 - paper_option_text.getGlobalBounds().height / 2);
 	
 	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
 	{
@@ -53,8 +77,8 @@ bool Game::init()
 	quit_option_text.setScale(0.5, 0.5);
 	quit_option_text.setFillColor(sf::Color(255, 255, 255, 128));
 	quit_option_text.setPosition(
-		window.getSize().x*3 / 4 - quit_option_text.getGlobalBounds().width / 2,
-		window.getSize().y / 2 - quit_option_text.getGlobalBounds().height / 2);
+		window.getSize().x / 2 - quit_option_text.getGlobalBounds().width / 2,
+		window.getSize().y * 1.3 / 2 - quit_option_text.getGlobalBounds().height / 2);
 
 
 	if (!background_texture.loadFromFile("D:/Wack-a-fool/Data/WhackaMole Worksheet/background.png"))
@@ -103,7 +127,7 @@ bool Game::init()
 
 void Game::update(float dt)
 {
-	if (in_menu == false)
+	if (gamestate == 1)
 	{
 		if ((bird.getPosition().x > (window.getSize().x - bird.getGlobalBounds().width)) ||
 			(bird.getPosition().x < 0))
@@ -131,13 +155,14 @@ void Game::update(float dt)
 
 void Game::render()
 {
-	if (in_menu == true)
+	if (gamestate == 0)
 	{
 		window.draw(menu_text);
-		window.draw(play_option_text);
+		window.draw(bird_option_text);
+		window.draw(paper_option_text);
 		window.draw(quit_option_text);
 	}
-	else
+	else if (gamestate == 1)
 	{
 		window.draw(background);
 		window.draw(title_text);
@@ -163,30 +188,42 @@ void Game::mouseClicked(sf::Event event)
 
 void Game::keyPressed(sf::Event event)
 {
-	if (in_menu == true)
+	if (gamestate == 0)
 	{
-		if (
-			(event.key.code == sf::Keyboard::Left) ||
-			(event.key.code == sf::Keyboard::Right))
+		if ((event.key.code == sf::Keyboard::Up) && (play_selected > 0))
 		{
-			play_selected = !play_selected;
-
-			if (play_selected)
-			{
-				play_option_text.setString("> Play <");
-				quit_option_text.setString("Quit");
-			}
-			else
-			{
-				play_option_text.setString("Play");
-				quit_option_text.setString("> Quit <");
-			}
+			play_selected--;
 		}
-		else if (event.key.code == sf::Keyboard::Enter)
+		if ((event.key.code == sf::Keyboard::Down) && (play_selected < 2))
 		{
-			if (play_selected)
+			play_selected++;
+		}
+
+				
+		if (play_selected == 0)
+		{
+			bird_option_text.setString("> Whak a Bird <");
+			paper_option_text.setString("Papers Please");
+			quit_option_text.setString("Quit");
+		}
+		else if (play_selected == 1)
+		{
+			bird_option_text.setString("Whak a Bird");
+			paper_option_text.setString("> Papers Please <");
+			quit_option_text.setString("Quit");
+		}
+		else if (play_selected == 2)
+		{
+			bird_option_text.setString("Whak a Bird");
+			paper_option_text.setString("Papers Please");
+			quit_option_text.setString("> Quit <");
+		}
+
+		if (event.key.code == sf::Keyboard::Enter)
+		{
+			if (play_selected == 1)
 			{
-				in_menu = false;
+				gamestate = 1;
 			}
 			else
 			{
@@ -194,7 +231,8 @@ void Game::keyPressed(sf::Event event)
 			}
 		}
 	}
-	else if (in_menu == false)
+
+	else if (gamestate == 1 || gamestate == 2)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
