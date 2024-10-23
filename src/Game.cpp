@@ -128,31 +128,33 @@ bool Game::init()
 	character = new sf::Sprite;
 	passport = new sf::Sprite;
 
-	if (!animals[0].loadFromFile("../Critter Crossing Customs/elephant.png"))
+	if (!animals[0].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/elephant.png"))
 	{
 		std::cout << "elephant texture did not load \n";
 	}
-	if (!animals[1].loadFromFile("../Critter Crossing Customs/moose.png"))
+	if (!animals[1].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/moose.png"))
 	{
 		std::cout << "moose texture did not load \n";
 	}
-	if (!animals[2].loadFromFile("../Critter Crossing Customs/penguin.png"))
+	if (!animals[2].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/penguin.png"))
 	{
 		std::cout << "penguin texture did not load \n";
 	}
 
-	if (!passports[0].loadFromFile("../Critter Crossing Customs/elephant passport.png"))
+	if (!passports[0].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/elephant passport.png"))
 	{
 		std::cout << "elephant passport texture did not load \n";
 	}
-	if (!passports[1].loadFromFile("../Critter Crossing Customs/moose passport.png"))
+	if (!passports[1].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/moose passport.png"))
 	{
 		std::cout << "moose passport texture did not load \n";
 	}
-	if (!passports[2].loadFromFile("../Critter Crossing Customs/penguin passport.png"))
+	if (!passports[2].loadFromFile("D:/Wack-a-fool/Critter Crossing Customs/penguin passport.png"))
 	{
 		std::cout << "penguin passport texture did not load \n";
 	}
+
+	newAnimal();
 	
 
   return true;
@@ -184,10 +186,6 @@ void Game::update(float dt)
 				bird.getLocalBounds().height));
 		}
 	}
-	else if (gamestate == 2)
-	{
-		newAnimal();
-	}
 }
 
 void Game::render()
@@ -209,8 +207,8 @@ void Game::render()
 	else if (gamestate == 2)
 	{
 		window.draw(background);
-		window.draw(character[3]);
-		window.draw(passport[3]);
+		window.draw(*character);
+		window.draw(*passport);
 	}
 }
 
