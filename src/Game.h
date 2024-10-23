@@ -16,6 +16,7 @@ class Game
   void keyPressed(sf::Event event);
   bool collisionCheck(sf::Vector2i, sf::Sprite);
   void Spawn(sf::Sprite);
+  void newAnimal();
 
  private:
   sf::RenderWindow& window;
@@ -46,6 +47,16 @@ class Game
 
   int score = 0;
   sf::Text score_text;
+
+  sf::Sprite* character;
+  sf::Sprite* passport;
+
+  sf::Texture* animals = new sf::Texture[3];
+  sf::Texture* passports = new sf::Texture[3];
+
+  bool passport_accepted;
+  bool passport_rejected;
+  bool should_accept;
 
 };
 

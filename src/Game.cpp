@@ -9,13 +9,16 @@ Game::Game(sf::RenderWindow& game_window)
 }
 
 Game::~Game()
-{
-
+{	
+	delete[] animals;
+	delete[] passports;
+	delete character;
+	delete passport;
 }
 
 bool Game::init()
 {
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -28,7 +31,7 @@ bool Game::init()
 		window.getSize().x / 2 - menu_text.getGlobalBounds().width / 2,
 		window.getSize().y / 4 - menu_text.getGlobalBounds().height / 2);
 	
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -41,7 +44,7 @@ bool Game::init()
 		window.getSize().x / 2 - play_option_text.getGlobalBounds().width / 2,
 		window.getSize().y / 2 - play_option_text.getGlobalBounds().height / 2);
 
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -54,7 +57,7 @@ bool Game::init()
 		window.getSize().x / 2 - bird_option_text.getGlobalBounds().width / 2,
 		window.getSize().y * 1.1 / 2 - bird_option_text.getGlobalBounds().height / 2);
 
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -67,7 +70,7 @@ bool Game::init()
 		window.getSize().x / 2 - paper_option_text.getGlobalBounds().width / 2,
 		window.getSize().y * 1.2 / 2 - paper_option_text.getGlobalBounds().height / 2);
 	
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -81,13 +84,13 @@ bool Game::init()
 		window.getSize().y * 1.3 / 2 - quit_option_text.getGlobalBounds().height / 2);
 
 
-	if (!background_texture.loadFromFile("D:/Wack-a-fool/Data/WhackaMole Worksheet/background.png"))
+	if (!background_texture.loadFromFile("../Data/WhackaMole Worksheet/background.png"))
 	{
 		std::cout << "background texture did not load \n";
 	}
 	background.setTexture(background_texture);
 
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -101,7 +104,7 @@ bool Game::init()
 		window.getSize().y / 2 - title_text.getGlobalBounds().height / 2);
 
 
-	if (!font.loadFromFile("D:/Wack-a-fool/Data/Fonts/OpenSans-Bold.ttf"))
+	if (!font.loadFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
 	{
 		std::cout << "font did not load \n";
 	}
@@ -114,13 +117,43 @@ bool Game::init()
 		window.getSize().x*11 / 12 - score_text.getGlobalBounds().width / 2,
 		window.getSize().y / 8 - score_text.getGlobalBounds().height / 2);
 
-	if (!bird_texture.loadFromFile("D:/Wack-a-fool/Data/WhackaMole Worksheet/bird.png"))
+	if (!bird_texture.loadFromFile("../Data/WhackaMole Worksheet/bird.png"))
 	{
 		std::cout << "bird texture did not load \n";
 	}
 	bird.setTexture(bird_texture);
 	bird.setPosition(100, 100);
 	bird.setScale(0.5, 0.5);
+
+	character = new sf::Sprite;
+	passport = new sf::Sprite;
+
+	if (!animals[0].loadFromFile("../Critter Crossing Customs/elephant.png"))
+	{
+		std::cout << "elephant texture did not load \n";
+	}
+	if (!animals[1].loadFromFile("../Critter Crossing Customs/moose.png"))
+	{
+		std::cout << "moose texture did not load \n";
+	}
+	if (!animals[2].loadFromFile("../Critter Crossing Customs/penguin.png"))
+	{
+		std::cout << "penguin texture did not load \n";
+	}
+
+	if (!passports[0].loadFromFile("../Critter Crossing Customs/elephant passport.png"))
+	{
+		std::cout << "elephant passport texture did not load \n";
+	}
+	if (!passports[1].loadFromFile("../Critter Crossing Customs/moose passport.png"))
+	{
+		std::cout << "moose passport texture did not load \n";
+	}
+	if (!passports[2].loadFromFile("../Critter Crossing Customs/penguin passport.png"))
+	{
+		std::cout << "penguin passport texture did not load \n";
+	}
+	
 
   return true;
 }
@@ -151,6 +184,10 @@ void Game::update(float dt)
 				bird.getLocalBounds().height));
 		}
 	}
+	else if (gamestate == 2)
+	{
+		newAnimal();
+	}
 }
 
 void Game::render()
@@ -168,6 +205,12 @@ void Game::render()
 		window.draw(title_text);
 		window.draw(bird);
 		window.draw(score_text);
+	}
+	else if (gamestate == 2)
+	{
+		window.draw(background);
+		window.draw(character[3]);
+		window.draw(passport[3]);
 	}
 }
 
@@ -221,9 +264,14 @@ void Game::keyPressed(sf::Event event)
 
 		if (event.key.code == sf::Keyboard::Enter)
 		{
-			if (play_selected == 1)
+			
+			if (play_selected == 0)
 			{
-				gamestate = 1;
+				gamestate = 1; //whak a bird
+			}
+			else if (play_selected == 1)
+			{
+				gamestate = 2; //papers please
 			}
 			else
 			{
@@ -236,7 +284,7 @@ void Game::keyPressed(sf::Event event)
 	{
 		if (event.key.code == sf::Keyboard::Escape)
 		{
-			window.close();
+			gamestate = 0; //menu
 		}
 	}
 }
@@ -261,3 +309,28 @@ void Game::Spawn(sf::Sprite)
 					rand() % int(window.getSize().y - bird.getGlobalBounds().height));
 }
 
+void Game::newAnimal()
+{
+	passport_accepted = false;
+	passport_rejected = false;
+
+	int animal_index = rand() % 3;
+	int passport_index = rand() % 3;
+
+	if (animal_index == passport_index)
+	{
+		should_accept = true;
+	}
+	else
+	{
+		should_accept = false;
+	}
+
+	character->setTexture(animals[animal_index], true);
+	character->setScale(1.8, 1.8);
+	character->setPosition(window.getSize().x / 12, window.getSize().y / 12);
+
+	passport->setTexture(passports[passport_index], true);
+	passport->setScale(0.6, 0.6);
+	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
+}
