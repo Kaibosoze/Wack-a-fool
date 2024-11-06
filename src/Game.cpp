@@ -155,6 +155,22 @@ bool Game::init()
 	}
 
 	newAnimal();
+
+	if (!accept_stamp_texture.loadFromFile("../Data/WhackaMole Worksheet/bird.png"))
+	{
+		std::cout << "bird texture did not load \n";
+	}
+	accept_stamp.setTexture(accept_stamp_texture);
+	accept_stamp.setPosition(100, 100);
+	accept_stamp.setScale(0.5, 0.5);
+
+	if (!reject_stamp_texture.loadFromFile("../Data/WhackaMole Worksheet/bird.png"))
+	{
+		std::cout << "bird texture did not load \n";
+	}
+	reject_stamp.setTexture(reject_stamp_texture);
+	reject_stamp.setPosition(100, 100);
+	reject_stamp.setScale(0.5, 0.5);
 	
 
   return true;
@@ -212,17 +228,52 @@ void Game::render()
 	}
 }
 
-void Game::mouseClicked(sf::Event event)
+void Game::mousePressed(sf::Event event)
 {
-  //get the click position
-  Game::mouseClick = sf::Mouse::getPosition(window);
+	if (gamestate == 1)
+	{
+		//get the click position
+		Game::mouseClick = sf::Mouse::getPosition(window);
 
-  if (Game::collisionCheck(Game::mouseClick, bird))
-  {
-	  Spawn(bird);
-	  score++;
-	  score_text.setString(std::to_string(score));
-  }
+		if (Game::collisionCheck(Game::mouseClick, bird))
+		{
+			Spawn(bird);
+			score++;
+			score_text.setString(std::to_string(score));
+		}
+	}
+
+	if (gamestate == 2)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i click = sf::Mouse::getPosition(window);
+			sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
+
+			if (passport->getGlobalBounds().contains(clickf))
+			{
+				dragged = passport;
+			}
+		}
+	}
+
+}
+
+void Game::mouseReleased(sf::Event event)
+{
+	if (gamestate == 2)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i click = sf::Mouse::getPosition(window);
+			sf::Vector2f clickf = static_cast<sf::Vector2f>(click);
+
+			if (passport->getGlobalBounds().contains(clickf))
+			{
+				dragged = nullptr;
+			}
+		}
+	}
 
 
 }
@@ -331,4 +382,19 @@ void Game::newAnimal()
 	passport->setTexture(passports[passport_index], true);
 	passport->setScale(0.6, 0.6);
 	passport->setPosition(window.getSize().x / 2, window.getSize().y / 3);
+}
+
+void Game::dragSprite(sf::Sprite* sprite)
+{
+	if (sprite != nullptr)
+	{
+		sf::Vector2i mouse_position = sf::Mouse::getPosition(window);
+		sf::Vector2f mouse_positionf = static_cast<sf::Vector2f>(mouse_position);
+
+		drag_offset.x = mouse_positionf.x - sprite->getPosition().x;
+		drag_offset.y = mouse_positionf.y - sprite->getPosition().y;
+
+		sf::Vector2f drag_position = mouse_positionf - drag_offset;
+		sprite->setPosition(drag_position.x, drag_position.y);
+	}
 }

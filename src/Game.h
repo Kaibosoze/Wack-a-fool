@@ -12,11 +12,13 @@ class Game
   bool init();
   void update(float dt);
   void render();
-  void mouseClicked(sf::Event event);
+  void mousePressed(sf::Event event);
+  void mouseReleased(sf::Event event);
   void keyPressed(sf::Event event);
   bool collisionCheck(sf::Vector2i, sf::Sprite);
   void Spawn(sf::Sprite);
   void newAnimal();
+  void dragSprite(sf::Sprite*);
 
  private:
   sf::RenderWindow& window;
@@ -38,6 +40,11 @@ class Game
   sf::Text play_option_text;
   sf::Text quit_option_text;
 
+  sf::Sprite accept_stamp;
+  sf::Texture accept_stamp_texture;
+  sf::Sprite reject_stamp;
+  sf::Texture reject_stamp_texture;
+
   int gamestate = 0;
   int play_selected = 0;
   int speed = 200;
@@ -50,6 +57,7 @@ class Game
 
   sf::Sprite* character;
   sf::Sprite* passport;
+  sf::Sprite* dragged = nullptr;
 
   sf::Texture* animals = new sf::Texture[3];
   sf::Texture* passports = new sf::Texture[3];
@@ -57,6 +65,8 @@ class Game
   bool passport_accepted;
   bool passport_rejected;
   bool should_accept;
+  
+  sf::Vector2f drag_offset;
 
 };
 
